@@ -1,0 +1,21 @@
+<template>
+
+    <div class="wrapper">
+        <v-head></v-head>
+
+    </div>
+</template>
+
+<script>
+import vHead from './Header.vue'
+export default {
+  data () {
+    return {
+
+    }
+  },
+  components: {
+    vHead
+  }
+}
+</script>
