@@ -1,23 +1,75 @@
 <template>
-    <div class="tags">
+    <div class="tags" v-if="showTags">
         <ul>
-            <li class="tags-li" v-for="(item,index) in tagsList" :key="index">
+            <li class="tags-li" v-for="(item,index) in tagsList" :key="index" :class="{'active': isActive(item.path)}">
                 <router-link :to="item.path" class="tags-li-title">
                     {{item.title}}
                 </router-link>
+                <span class="tags-li-icon" @click="closeTags(index)"><i class="el-icon-close"></i></span>
             </li>
         </ul>
     </div>
 </template>
 
 <script>
+import bus from '../common/bus'
 export default {
   data () {
     return {
       tagsList: []
     }
+  },
+  methods: {
+    isActive (path) {
+      return path === this.$route.fullPath
+    },
+
+    setTags (route) {
+      const isExist = this.tagsList.some(item => {
+        return item.path === route.fullPath
+      })
+      if (!isExist) {
+        if (this.tagsList.length >= 8) {
+          this.tagsList.shift()
+        }
+        this.tagsList.push({
+          title: route.meta.title,
+          path: route.fullPath,
+          name: route.matched[1].components.default.name
+        })
+      }
+      bus.$emit('tags', this.tagsList)
+    },
+    closeTags (index) {
+      console.log(this.tagsList)
+      const delItem = this.tagsList.splice(index, 1)[0]
+      console.log(delItem)
+      const item = this.tagsList[index] ? this.tagsList[index] : this.tagsList[index - 1]
+      console.log(item)
+      if (item) {
+        delItem.path === this.$route.fullPath && this.$router.push(item.path)
+      } else {
+        this.$router.push('/')
+      }
+      console.log(delItem)
+    }
+
+  },
+  computed: {
+    showTags () {
+      return this.tagsList.length > 0
+    }
+  },
+  watch: {
+    $route (newValue, oldValue) {
+      this.setTags(newValue)
+    }
+  },
+  created () {
+    this.setTags(this.$route)
   }
 }
+
 </script>
 
 <style>
