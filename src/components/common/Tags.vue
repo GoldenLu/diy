@@ -8,6 +8,17 @@
                 <span class="tags-li-icon" @click="closeTags(index)"><i class="el-icon-close"></i></span>
             </li>
         </ul>
+        <div class="tags-close-box">
+          <el-dropdown @command="handleTags">
+            <el-button size="mini" type="primary">
+              标签选项<i class="el-icon-arrow-down el-icon--right"></i>
+            </el-button>
+            <el-dropdown-menu size="small" slot="dropdown">
+              <el-dropdown-item command="other">关闭其他</el-dropdown-item>
+              <el-dropdown-item command="all">关闭所有</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
     </div>
 </template>
 
@@ -41,17 +52,26 @@ export default {
       bus.$emit('tags', this.tagsList)
     },
     closeTags (index) {
-      console.log(this.tagsList)
-      const delItem = this.tagsList.splice(index, 1)[0]
-      console.log(delItem)
+      const delItem = this.tagsList.splice(index, 1)
       const item = this.tagsList[index] ? this.tagsList[index] : this.tagsList[index - 1]
-      console.log(item)
       if (item) {
         delItem.path === this.$route.fullPath && this.$router.push(item.path)
       } else {
         this.$router.push('/')
       }
-      console.log(delItem)
+    },
+    closeAll () {
+      this.tagsList = []
+      this.$router.push('/')
+    },
+    closeOther () {
+      const curItem = this.tagsList.filter(item => {
+        return item.path === this.$route.fullPath
+      })
+      this.tagsList = curItem
+    },
+    handleTags (command) {
+      command === 'other' ? this.closeOther() : this.closeAll()
     }
 
   },
@@ -67,6 +87,26 @@ export default {
   },
   created () {
     this.setTags(this.$route)
+    // 监听关闭当前页面的标签页
+    bus.$on('close_current_tags', () => {
+      for (let i = 0, len = this.tagsList.length; i < len; i++) {
+        const item = this.tagsList[i]
+        console.log('进来了')
+        if (item.path === this.$route.fullPath) {
+          console.log(i)
+          if (i < len - 1) {
+            this.$router.push(this.tagsList[i + 1].path)
+          } else if (i > 0) {
+            this.$router.push(this.tagsList[i - 1].path)
+            console.log('ffffffffffffffffffaf')
+          } else {
+            this.$router.push('/')
+          }
+          this.tagsList.splice(i, 1)
+          break
+        }
+      }
+    })
   }
 }
 

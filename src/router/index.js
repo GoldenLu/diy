@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from '../components/common/Home.vue'
 import Dashboard from '../components/page/Dashboard.vue'
 import Table from '../components/page/BaseTable'
+import Tabs from '../components/page/Tabs'
 
 Vue.use(Router)
 
@@ -27,7 +28,12 @@ export default new Router({
           path: '/table',
           component: Table,
           meta: { title: '基础表格' }
+        }, {
+          path: '/tabs',
+          component: Tabs,
+          meta: { title: 'tab选项卡' }
         }
+
       ]
     }
   ]

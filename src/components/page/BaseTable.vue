@@ -1,5 +1,7 @@
 <template>
-    <h1>基础表格</h1>
+    <div class="crumbs">
+    <h1 style="font-size:40px">基础表格</h1>
+    </div>
 </template>
 
 <script>

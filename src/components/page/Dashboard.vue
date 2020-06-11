@@ -1,5 +1,5 @@
 <template>
-    <h1>首页dashboard</h1>
+    <h1 style="font-size:40px">首页dashboard</h1>
 </template>
 
 <script>
