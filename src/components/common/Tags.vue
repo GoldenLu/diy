@@ -52,7 +52,8 @@ export default {
       bus.$emit('tags', this.tagsList)
     },
     closeTags (index) {
-      const delItem = this.tagsList.splice(index, 1)
+      const delItem = this.tagsList.splice(index, 1)[0]
+
       const item = this.tagsList[index] ? this.tagsList[index] : this.tagsList[index - 1]
       if (item) {
         delItem.path === this.$route.fullPath && this.$router.push(item.path)
@@ -91,14 +92,11 @@ export default {
     bus.$on('close_current_tags', () => {
       for (let i = 0, len = this.tagsList.length; i < len; i++) {
         const item = this.tagsList[i]
-        console.log('进来了')
         if (item.path === this.$route.fullPath) {
-          console.log(i)
           if (i < len - 1) {
             this.$router.push(this.tagsList[i + 1].path)
           } else if (i > 0) {
             this.$router.push(this.tagsList[i - 1].path)
-            console.log('ffffffffffffffffffaf')
           } else {
             this.$router.push('/')
           }
@@ -176,7 +174,6 @@ export default {
         box-sizing: border-box;
         padding-top: 1px;
         text-align: center;
-        width: 110px;
         height: 30px;
         background: #fff;
         box-shadow: -3px 0 15px 3px rgba(0, 0, 0, .1);

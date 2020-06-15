@@ -17,6 +17,10 @@ export default new Router({
   routes: [
     {
       path: '/',
+      redirect: '/dashboard'
+    },
+    {
+      path: '/',
       component: Home,
       meta: { title: '自述文件' },
       children: [
