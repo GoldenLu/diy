@@ -1,0 +1,28 @@
+<template>
+    <div>
+
+    </div>
+</template>
+
+<script>
+
+</script>
+
+<style scoped>
+.schart-box {
+    display: inline-block;
+    margin: 20px;
+}
+.schart {
+    width: 600px;
+    height: 400px;
+}
+.content-title {
+    clear: both;
+    font-weight: 400;
+    line-height: 50px;
+    margin: 10px 0;
+    font-size: 22px;
+    color: #1f2f3d;
+}
+</style>
