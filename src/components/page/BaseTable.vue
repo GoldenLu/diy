@@ -24,7 +24,7 @@
             </div>
 
         <el-table
-            :data="tableData"
+            :data="tempData.slice((query.pageIndex-1)*(query.pageSize),(query.pageIndex)*(query.pageSize))"
             border
             class="table"
             ref="multipleTable"
@@ -112,6 +112,7 @@ export default {
         pageIndex: 1,
         pageSize: 2
       },
+      tempData: [],
       tableData: [],
       multipleSelection: [],
       delList: [],
@@ -131,14 +132,17 @@ export default {
     },
     getData () {
       fetchData(this.query).then(res => {
+        this.tempData = res.list
         this.tableData = res.list
         this.pageTotal = res.pageTotal || 50
       })
     },
     // 触发搜索按钮
     handleSearch () {
-      this.$set(this.query, 'pageIndex', 1)
-      this.getData()
+      this.tempData = this.tableData
+      if (this.query.address.length !== 0) { this.tempData = this.tempData.filter(item => !item.address.indexOf(this.query.address)) }
+      if (this.query.name.length !== 0) { this.tempData = this.tempData.filter(item => !item.name.indexOf(this.query.name)) }
+      this.pageTotal = this.tempData.length
     },
     handleDelete (index, row) {
       // 二次确认删除
@@ -148,6 +152,7 @@ export default {
         .then(() => {
           this.$message.success('删除成功')
           this.tableData.splice(index, 1)
+          this.pageTotal = this.tableData.length
         })
         .catch(() => {})
     },
@@ -160,6 +165,8 @@ export default {
         this.tableData = this.tableData.filter(item => item.id !== this.multipleSelection[i].id)
       }
       this.$message.error(`删除了${str}`)
+      this.pageTotal = this.tableData.length
+      this.tempData = this.tableData
       this.multipleSelection = []
     },
     // 编辑操作
@@ -167,8 +174,6 @@ export default {
       this.idx = index
       this.form = row
       this.editVisible = true
-      console.log(this.idx)
-      console.log(this.form)
     },
     // 保存编辑
     saveEdit () {
@@ -179,7 +184,6 @@ export default {
     // 分页导航
     handlePageChange (val) {
       this.$set(this.query, 'pageIndex', val)
-      this.getData()
     }
 
   }
