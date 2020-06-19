@@ -34,7 +34,25 @@
             "state": "成功",
             "date": "2019-10-20",
             "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
+        },
+        {
+            "id": 5,
+            "name": "张七",
+            "money": 78,
+            "address": "湖南省长沙市",
+            "state": "失败",
+            "date": "2019-11-12",
+            "thumb": "https://lin-xin.gitee.io/images/post/parcel.png"
+        },
+        {
+            "id": 6,
+            "name": "关八",
+            "money": 101,
+            "address": "福建省厦门市鼓浪屿",
+            "state": "成功",
+            "date": "2019-10-02",
+            "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
         }
     ],
-    "pageTotal": 4
+    "pageTotal": 6
 }

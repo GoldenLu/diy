@@ -151,8 +151,11 @@ export default {
       })
         .then(() => {
           this.$message.success('删除成功')
-          this.tableData.splice(index, 1)
+          this.tableData.splice((this.query.pageIndex - 1) * this.query.pageSize + index, 1)
           this.pageTotal = this.tableData.length
+          if (this.pageTotal / this.query.pageSize <= 1) {
+            this.query.pageIndex--
+          }
         })
         .catch(() => {})
     },
