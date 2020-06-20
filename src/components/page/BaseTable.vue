@@ -16,8 +16,7 @@
                     @click="delAllSelection"
                 >批量删除</el-button>
             <el-select v-model="query.address" placeholder="地址" class="handle-select mr10">
-                <el-option key="1" label="广东省" value="广东省"></el-option>
-                <el-option key="2" label="湖南省" value="湖南省"></el-option>
+                <el-option v-for="item in proOptions" :key="item.index" :label="item" :value="item" ></el-option>
             </el-select>
             <el-input  v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
@@ -112,8 +111,11 @@ export default {
         pageIndex: 1,
         pageSize: 2
       },
+      proOptions: [],
       tempData: [],
       tableData: [],
+      allData: [],
+      trans: [],
       multipleSelection: [],
       delList: [],
       editVisible: false,
@@ -130,13 +132,23 @@ export default {
     handleSelectionChange (val) {
       this.multipleSelection = val
     },
+    unique (arr) {
+      return Array.from(new Set(arr))
+    },
     getData () {
       fetchData(this.query).then(res => {
         this.tempData = res.list
         this.tableData = res.list
+        this.allData = res.list
         this.pageTotal = res.pageTotal || 50
+        for (let i = 0; i < this.tableData.length; i++) {
+          const temp = this.tableData[i].address.indexOf('省')
+          this.proOptions.push(this.tableData[i].address.slice(0, temp + 1))
+        }
+        this.proOptions = this.unique(this.proOptions)
       })
     },
+
     // 触发搜索按钮
     handleSearch () {
       this.tempData = this.tableData
@@ -153,7 +165,7 @@ export default {
           this.$message.success('删除成功')
           this.tableData.splice((this.query.pageIndex - 1) * this.query.pageSize + index, 1)
           this.pageTotal = this.tableData.length
-          if (this.pageTotal / this.query.pageSize <= 1) {
+          if (this.pageTotal / this.query.pageSize <= this.query.pageIndex - 1) {
             this.query.pageIndex--
           }
         })
@@ -169,6 +181,9 @@ export default {
       }
       this.$message.error(`删除了${str}`)
       this.pageTotal = this.tableData.length
+      if (this.pageTotal / this.query.pageSize <= this.query.pageIndex - 1) {
+        this.query.pageIndex--
+      }
       this.tempData = this.tableData
       this.multipleSelection = []
     },

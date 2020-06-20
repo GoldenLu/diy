@@ -21,7 +21,7 @@
             "id": 3,
             "name": "王五",
             "money": 789,
-            "address": "湖南省长沙市",
+            "address": "广东省长沙市",
             "state": "失败",
             "date": "2019-11-11",
             "thumb": "https://lin-xin.gitee.io/images/post/parcel.png"
@@ -30,7 +30,7 @@
             "id": 4,
             "name": "赵六",
             "money": 1011,
-            "address": "福建省厦门市鼓浪屿",
+            "address": "四川省厦门市鼓浪屿",
             "state": "成功",
             "date": "2019-10-20",
             "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
@@ -39,7 +39,7 @@
             "id": 5,
             "name": "张七",
             "money": 78,
-            "address": "湖南省长沙市",
+            "address": "陕西省长沙市",
             "state": "失败",
             "date": "2019-11-12",
             "thumb": "https://lin-xin.gitee.io/images/post/parcel.png"
@@ -48,7 +48,7 @@
             "id": 6,
             "name": "关八",
             "money": 101,
-            "address": "福建省厦门市鼓浪屿",
+            "address": "黑龙江省厦门市鼓浪屿",
             "state": "成功",
             "date": "2019-10-02",
             "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
