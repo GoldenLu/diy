@@ -4,6 +4,8 @@ import Home from '../components/common/Home.vue'
 import Dashboard from '../components/page/Dashboard.vue'
 import Table from '../components/page/BaseTable'
 import Tabs from '../components/page/Tabs'
+import Icon from '../components/page/Icon'
+import Form from '../components/page/BaseForm'
 
 Vue.use(Router)
 
@@ -36,6 +38,15 @@ export default new Router({
           path: '/tabs',
           component: Tabs,
           meta: { title: 'tab选项卡' }
+        }, {
+          path: '/form',
+          component: Form,
+          meta: { title: '基本表单' }
+        },
+        {
+          path: '/icon',
+          component: Icon,
+          meta: { title: '自定义图标' }
         }
 
       ]

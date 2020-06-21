@@ -185,9 +185,10 @@ export default {
 }
 .sidebar-el-menu:not(.el-menu--collapse) {
     width: 220px;
-    padding-left: 20px;
+    /* padding-left: 20px; */
 }
 .sidebar > ul {
     height: 100%;
 }
+
 </style>

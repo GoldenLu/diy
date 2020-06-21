@@ -15,7 +15,7 @@
                     class="handle-del mr10"
                     @click="delAllSelection"
                 >批量删除</el-button>
-            <el-select v-model="query.address" placeholder="地址" class="handle-select mr10">
+            <el-select v-model="query.address" placeholder="地址" class="handle-select mr10" clearable>
                 <el-option v-for="item in proOptions" :key="item.index" :label="item" :value="item" ></el-option>
             </el-select>
             <el-input  v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
@@ -23,7 +23,7 @@
             </div>
 
         <el-table
-            :data="tempData.slice((query.pageIndex-1)*(query.pageSize),(query.pageIndex)*(query.pageSize))"
+            :data="tempData[query.pageIndex-1]"
             border
             class="table"
             ref="multipleTable"
@@ -125,8 +125,8 @@ export default {
       id: -1
     }
   },
-  created () {
-    this.getData()
+  async created () {
+    await this.getData()
   },
   methods: {
     handleSelectionChange (val) {
@@ -137,24 +137,52 @@ export default {
     },
     getData () {
       fetchData(this.query).then(res => {
-        this.tempData = res.list
-        this.tableData = res.list
         this.allData = res.list
         this.pageTotal = res.pageTotal || 50
-        for (let i = 0; i < this.tableData.length; i++) {
-          const temp = this.tableData[i].address.indexOf('省')
-          this.proOptions.push(this.tableData[i].address.slice(0, temp + 1))
+        for (let i = 0; i < this.allData.length; i++) {
+          const temp = this.allData[i].address.indexOf('省')
+          this.proOptions.push(this.allData[i].address.slice(0, temp + 1))
         }
         this.proOptions = this.unique(this.proOptions)
+        this.handleSearch()
       })
     },
+    // 数组切分
+    chunk (array, size) {
+      const length = array.length
+      if (!length || !size || size < 1) {
+        return []
+      }
+      let index = 0
+      let resIndex = 0
 
+      const result = new Array(Math.ceil(length / size))
+      while (index < length) {
+        result[resIndex++] = array.slice(index, (index += size))
+      }
+      return result
+    },
+    // 初始化数据
+    initData () {
+      const res = this.chunk(this.tableData, this.query.pageSize)
+      this.tempData = res
+      if (this.tempData.length && this.query.pageIndex > this.tempData.length) {
+        this.query.pageIndex = this.tempData.length
+      }
+    },
     // 触发搜索按钮
     handleSearch () {
-      this.tempData = this.tableData
-      if (this.query.address.length !== 0) { this.tempData = this.tempData.filter(item => !item.address.indexOf(this.query.address)) }
-      if (this.query.name.length !== 0) { this.tempData = this.tempData.filter(item => !item.name.indexOf(this.query.name)) }
-      this.pageTotal = this.tempData.length
+      if (this.query.address) {
+        this.tableData = this.allData.filter(item => !item.address.indexOf(this.query.address)
+        )
+      } else {
+        this.tableData = this.allData
+      }
+      if (this.query.name) {
+        this.tableData = this.tableData.filter(item => !item.name.indexOf(this.query.name))
+      }
+      this.initData()
+      this.pageTotal = this.tableData.length
     },
     handleDelete (index, row) {
       // 二次确认删除
@@ -163,11 +191,11 @@ export default {
       })
         .then(() => {
           this.$message.success('删除成功')
-          this.tableData.splice((this.query.pageIndex - 1) * this.query.pageSize + index, 1)
-          this.pageTotal = this.tableData.length
-          if (this.pageTotal / this.query.pageSize <= this.query.pageIndex - 1) {
-            this.query.pageIndex--
-          }
+          const res = this.allData.filter(item => {
+            return item.id !== row.id
+          })
+          this.allData = res
+          this.handleSearch()
         })
         .catch(() => {})
     },
@@ -177,14 +205,11 @@ export default {
       this.delList = this.delList.concat(this.multipleSelection)
       for (let i = 0; i < length; i++) {
         str += this.multipleSelection[i].name + ' '
-        this.tableData = this.tableData.filter(item => item.id !== this.multipleSelection[i].id)
+        this.allData = this.allData.filter(item => item.id !== this.multipleSelection[i].id)
       }
       this.$message.error(`删除了${str}`)
       this.pageTotal = this.tableData.length
-      if (this.pageTotal / this.query.pageSize <= this.query.pageIndex - 1) {
-        this.query.pageIndex--
-      }
-      this.tempData = this.tableData
+      this.handleSearch()
       this.multipleSelection = []
     },
     // 编辑操作
