@@ -6,6 +6,9 @@ import Table from '../components/page/BaseTable'
 import Tabs from '../components/page/Tabs'
 import Icon from '../components/page/Icon'
 import Form from '../components/page/BaseForm'
+import Editor from '../components/page/VueEditor'
+import Markdown from '../components/page/Markdown'
+import Upload from '../components/page/Upload'
 
 Vue.use(Router)
 
@@ -47,6 +50,23 @@ export default new Router({
           path: '/icon',
           component: Icon,
           meta: { title: '自定义图标' }
+        },
+        {
+          path: '/editor',
+          component: Editor,
+          meta: { title: '富文本编辑器' }
+
+        },
+        {
+          path: '/markdown',
+          component: Markdown,
+          meta: { title: 'markdown编辑器' }
+        },
+        {
+          // 图片上传组件
+          path: '/upload',
+          component: Upload,
+          meta: { title: '文件上传' }
         }
 
       ]
