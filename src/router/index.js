@@ -9,6 +9,7 @@ import Form from '../components/page/BaseForm'
 import Editor from '../components/page/VueEditor'
 import Markdown from '../components/page/Markdown'
 import Upload from '../components/page/Upload'
+import Charts from '../components/page/BaseCharts'
 
 Vue.use(Router)
 
@@ -67,6 +68,12 @@ export default new Router({
           path: '/upload',
           component: Upload,
           meta: { title: '文件上传' }
+        },
+        {
+          // vue-schart组件
+          path: '/charts',
+          component: Charts,
+          meta: { title: 'schart图表' }
         }
 
       ]

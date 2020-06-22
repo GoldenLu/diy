@@ -16,9 +16,7 @@
                 class="upload-demo"
                 drag
                 action="http://jsonplaceholder.typicode.com/api/posts/"
-                multiple
-                :on-change="handleChange"
-                :on-success="handleAvatarSuccess">
+                multiple>
                 <i class="el-icon-upload"></i>
                 <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
                 <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
@@ -35,15 +33,22 @@
                 </div>
             </div>
 
+            <el-dialog title="裁剪图片" :visible.sync="dialogVisible" width="30%">
+                <vue-cropper ref='cropper' :src="imgSrc" :ready="cropImage" :zoom="cropImage" :cropmove="cropImage" style="width:100%;height:300px;"></vue-cropper>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="cancelCrop">取 消</el-button>
+                    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+                </span>
+            </el-dialog>
         </div>
     </div>
 </template>
 
 <script>
-// import VueCropper from 'vue-cropperjs'
+import VueCropper from 'vue-cropperjs'
 export default {
   name: 'upload',
-  data () {
+  data: function () {
     return {
       defaultSrc: require('../../assets/img/img.jpg'),
       fileList: [],
@@ -53,16 +58,37 @@ export default {
     }
   },
   components: {
-    // VueCropper
+    VueCropper
   },
   methods: {
-    handleAvatarSuccess (res, file) {
-      this.$message.success('上传成功')
-      console.log('上传成功')
+    setImage (e) {
+      const file = e.target.files[0]
+      if (!file.type.includes('image/')) {
+        return
+      }
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        this.dialogVisible = true
+        this.imgSrc = event.target.result
+        this.$refs.cropper && this.$refs.cropper.replace(event.target.result)
+      }
+      reader.readAsDataURL(file)
     },
-    handleChange (file, fileList) {
-      this.$message.success('上传失败')
-      console.log('上传失败')
+    cropImage () {
+      this.cropImg = this.$refs.cropper.getCroppedCanvas().toDataURL()
+    },
+    cancelCrop () {
+      this.dialogVisible = false
+      this.cropImg = this.defaultSrc
+    },
+    imageuploaded (res) {
+      console.log(res)
+    },
+    handleError () {
+      this.$notify.error({
+        title: '上传失败',
+        message: '图片上传接口上传失败，可更改为自己的服务器接口'
+      })
     }
   },
   created () {
