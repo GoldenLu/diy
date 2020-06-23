@@ -10,6 +10,7 @@ import Editor from '../components/page/VueEditor'
 import Markdown from '../components/page/Markdown'
 import Upload from '../components/page/Upload'
 import Charts from '../components/page/BaseCharts'
+import Drag from '../components/page/DragList'
 
 Vue.use(Router)
 
@@ -74,6 +75,12 @@ export default new Router({
           path: '/charts',
           component: Charts,
           meta: { title: 'schart图表' }
+        },
+        {
+          // 拖拽列表组件
+          path: '/drag',
+          component: Drag,
+          meta: { title: '拖拽列表' }
         }
 
       ]
