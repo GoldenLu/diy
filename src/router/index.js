@@ -11,6 +11,7 @@ import Markdown from '../components/page/Markdown'
 import Upload from '../components/page/Upload'
 import Charts from '../components/page/BaseCharts'
 import Drag from '../components/page/DragList'
+import DragDialog from '../components/page/DragDialog'
 
 Vue.use(Router)
 
@@ -81,6 +82,12 @@ export default new Router({
           path: '/drag',
           component: Drag,
           meta: { title: '拖拽列表' }
+        },
+        {
+          // 拖拽Dialog组件
+          path: '/dialog',
+          component: DragDialog,
+          meta: { title: '拖拽弹框' }
         }
 
       ]
