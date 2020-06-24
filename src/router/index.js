@@ -12,6 +12,7 @@ import Upload from '../components/page/Upload'
 import Charts from '../components/page/BaseCharts'
 import Drag from '../components/page/DragList'
 import DragDialog from '../components/page/DragDialog'
+import I18n from '../components/page/I18n'
 
 Vue.use(Router)
 
@@ -88,9 +89,45 @@ export default new Router({
           path: '/dialog',
           component: DragDialog,
           meta: { title: '拖拽弹框' }
+        },
+        {
+          // 国际化组件
+          path: '/i18n',
+          component: I18n,
+          meta: { title: '国际化' }
+        },
+        {
+          // 权限页面
+          path: '/permission',
+          component: () => import(/* webpackChunkName: "permission" */ '../components/page/Permission.vue'),
+          meta: { title: '权限测试', permission: true }
+        },
+        {
+          path: '/404',
+          component: () => import(/* webpackChunkName: "404" */ '../components/page/404.vue'),
+          meta: { title: '404' }
+        },
+        {
+          path: '/403',
+          component: () => import(/* webpackChunkName: "403" */ '../components/page/403.vue'),
+          meta: { title: '403' }
+        },
+        {
+          path: '/donate',
+          component: () => import(/* webpackChunkName: "donate" */ '../components/page/Donate.vue'),
+          meta: { title: '支持作者' }
         }
 
       ]
+    },
+    {
+      path: '/login',
+      component: () => import(/* webpackChunkName: "login" */ '../components/page/Login.vue'),
+      meta: { title: '登录' }
+    },
+    {
+      path: '*',
+      redirect: '/404'
     }
   ]
 })

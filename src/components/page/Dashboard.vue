@@ -119,7 +119,7 @@ export default {
   },
   data () {
     return {
-      name: 'Su',
+      name: localStorage.getItem('ms_username'),
       todoList: [
         {
           title: '今天要修复100个bug',
